@@ -1,0 +1,25 @@
+Fix for ios14 or newer:
+1.
+- node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m
+Fỉn line "(void)displayLayer:(CALayer *)layer" and replace with the code below:
+
+//--------------------------------------------------------
+#pragma mark - CALayerDelegate
+
+- (void)displayLayer:(CALayer *)layer
+{
+  if (_currentFrame) {
+    layer.contentsScale = self.animatedImageScale;
+    layer.contents = (__bridge id)_currentFrame.CGImage;
+  } else {
+    [super displayLayer:layer];
+  }
+}
+//--------------------------------------------------------
+
+2. Run:
+ - npx patch-package react-native
+ OR
+ - yarn patch-package react-native --use-yarn
+
+3. Delete the app in device and simulator and run the app again
